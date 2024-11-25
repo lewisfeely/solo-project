@@ -1,9 +1,16 @@
-const {} = require("../model/model");
-const endpoints = require("../../endpoints.json");
+const { getTopic, getArticleById } = require("../model/model");
 
 exports.getTopics = (req, res) => {
-  console.log(endpoints["GET /api/topics"].exampleResponse);
-  res.status(200).send({
-    endpoints: endpoints["GET /api/topics"].exampleResponse,
+  const topics = getTopic();
+  console.log(topics);
+  res.status(200).send({ topics });
+};
+
+exports.getArticle = (req, res) => {
+  const id = req.params.article_id;
+  console.log(id);
+  getArticleById(id).then(({ rows }) => {
+    console.log(rows);
+    res.status(200).send({ rows });
   });
 };
