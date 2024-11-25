@@ -24,23 +24,44 @@ describe("GET /api", () => {
       });
   });
 });
-// describe("GET /api/topics", () => {
-//   test("200: responds with an array of all topics", () => {
-//     return request(app)
-//       .get("./api/topics")
-//       .expect(200)
-//       .then(({ body: { topics } }) => {
-//         expect(topics).toEqual(endpointsJson);
-//       });
-//   });
-// });
-// describe("GET /api/articles", () => {
-//   test("200: responds with an array of articles", () => {
-//     return request(app)
-//       .get("./api/articles")
-//       .expect(200)
-//       .then(({ body: { articles } }) => {
-//         expect(articles).toEqual(endpointsJson);
-//       });
-//   });
-// });
+describe("GET /api/topics", () => {
+  test("200: responds with an array of all topics", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then(
+        ({
+          body: {
+            endpoints: { topics },
+          },
+        }) => {
+          console.log(topics);
+          topics.forEach((topic) => {
+            expect(topic).toMatchObject({
+              slug: expect.any(String),
+              description: expect.any(String),
+            });
+          });
+        }
+      );
+  });
+  test("400: returns bad request when nothing is passed through", () => {
+    return request(app)
+      .get("/api/tropic")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+});
+describe("GET /api/articles", () => {
+  test("200: responds with an array of articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toEqual(endpointsJson);
+      });
+  });
+});
