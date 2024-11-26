@@ -1,4 +1,4 @@
-const { getTopic, getArticleById } = require("../model/model");
+const { getTopic, getArticleById, getArticle } = require("../model/model");
 
 exports.getTopics = (req, res) => {
   const topics = getTopic();
@@ -6,14 +6,23 @@ exports.getTopics = (req, res) => {
   res.status(200).send({ topics });
 };
 
-exports.getArticle = (req, res, next) => {
+exports.getArticles = (req, res) => {
   const id = req.params.article_id;
   getArticleById(id)
-    .then(({ rows }) => {
-      res.status(200).send({ rows });
+    .then((response) => {
+      res.status(200).send({ response });
     })
     .catch((err) => {
-      console.log(err);
       res.status(err.status).send({ msg: err.msg });
+    });
+};
+
+exports.getWholeArticle = (req, res) => {
+  getArticle()
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      next(err);
     });
 };

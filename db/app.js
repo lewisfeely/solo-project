@@ -1,6 +1,10 @@
 const express = require("express");
 const endpoints = require("../endpoints.json");
-const { getTopics, getArticle } = require("./controllers.js/controllers");
+const {
+  getTopics,
+  getArticles,
+  getWholeArticle,
+} = require("./controllers.js/controllers");
 
 const app = express();
 
@@ -10,10 +14,12 @@ app.get("/api", (req, res) => {
 
 app.get("/api/topics", getTopics);
 
-app.get("/api/articles/:article_id", getArticle);
+app.get("/api/articles/:article_id", getArticles);
 
-app.use("/*", (req, res, next) => {
-  res.status(400).send({ msg: "bad request" });
+app.get("/api/articles", getWholeArticle);
+
+app.all("/*", (req, res, next) => {
+  res.status(404).send({ msg: "Not found" });
   next();
 });
 

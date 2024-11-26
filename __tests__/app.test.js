@@ -41,20 +41,20 @@ describe("GET /api/topics", () => {
   test("400: returns bad request when nothing is passed through", () => {
     return request(app)
       .get("/api/tropic")
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe("bad request");
+        expect(msg).toBe("Not found");
       });
   });
 });
-describe.only("GET /api/articles/:article_id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("200: responds with an array of articles", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        body.rows.forEach((articles) => {
+        body.response.forEach((articles) => {
           expect(articles).toMatchObject({
             author: expect.any(String),
             title: expect.any(String),
@@ -68,13 +68,48 @@ describe.only("GET /api/articles/:article_id", () => {
         });
       });
   });
-  test.only("400: responds with an error when requested an id that doesnt exist", () => {
+  test("400: responds with an error when requested an id that doesnt exist", () => {
     return request(app)
       .get("/api/articles/2000")
       .expect(400)
       .then(({ body }) => {
         console.log(body);
         expect(body.msg).toBe("bad request");
+      });
+  });
+});
+
+describe("GET /api/articles", () => {
+  test("200: should return the array of articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.length).toBe(13);
+        body.forEach((articles) => {
+          expect(articles).toMatchObject({
+            author: expect.any(String),
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number),
+          });
+        });
+        console.log(body);
+        expect(body).toBeSortedBy("created_at", { decending: true });
+      });
+  });
+  test("404: returns not found weh ninputtig an invalid api", () => {
+    return request(app)
+      .get("/api/tartcles")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("Not found");
       });
   });
 });
