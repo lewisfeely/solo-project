@@ -37,3 +37,17 @@ exports.getArticle = () => {
     return rows;
   });
 };
+
+exports.getCommentsByArticleIds = (article_id) => {
+  let queryStr = "SELECT * FROM comments WHERE article_id = $1";
+  const args = [];
+  args.push(article_id);
+
+  return db.query(queryStr, args).then((comments) => {
+    console.log(comments.rows);
+    if (!comments.rows.length) {
+      return Promise.reject({ status: 400, msg: "bad request" });
+    }
+    return comments;
+  });
+};

@@ -113,3 +113,41 @@ describe("GET /api/articles", () => {
       });
   });
 });
+describe("GET /api/articles/:article:id/comments", () => {
+  test("get articles by id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        comments.rows.forEach((comments) => {
+          expect(comments).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          });
+        });
+      });
+  });
+  test("404: not found", () => {
+    return request(app)
+      .get("/api/articles/3/comm")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("Not found");
+      });
+  });
+  test("400: bad request", () => {
+    return request(app)
+      .get("/api/articles/1000/comments")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+});

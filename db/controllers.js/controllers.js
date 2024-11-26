@@ -1,4 +1,9 @@
-const { getTopic, getArticleById, getArticle } = require("../model/model");
+const {
+  getTopic,
+  getArticleById,
+  getArticle,
+  getCommentsByArticleIds,
+} = require("../model/model");
 
 exports.getTopics = (req, res) => {
   const topics = getTopic();
@@ -24,5 +29,16 @@ exports.getWholeArticle = (req, res) => {
     })
     .catch((err) => {
       next(err);
+    });
+};
+
+exports.getCommentsByArticleId = (req, res) => {
+  const id = req.params.article_id;
+  getCommentsByArticleIds(id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      res.status(err.status).send({ msg: err.msg });
     });
 };
