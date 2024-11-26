@@ -10,8 +10,10 @@ exports.getTopic = () => {
 exports.getArticleById = (id) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = ${id}`)
-    .then((rows) => {
-      console.log(rows);
-      return rows;
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({ status: 400, msg: "bad request" });
+      }
+      return result;
     });
 };

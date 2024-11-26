@@ -13,7 +13,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe.only("GET /api", () => {
+describe("GET /api", () => {
   test("200: Responds with an object detailing the documentation for each endpoint", () => {
     return request(app)
       .get("/api")
@@ -23,7 +23,7 @@ describe.only("GET /api", () => {
       });
   });
 });
-describe.only("GET /api/topics", () => {
+describe("GET /api/topics", () => {
   test("200: responds with an array of all topics", () => {
     return request(app)
       .get("/api/topics")
@@ -54,7 +54,6 @@ describe.only("GET /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         body.rows.forEach((articles) => {
           expect(articles).toMatchObject({
             author: expect.any(String),
@@ -67,6 +66,15 @@ describe.only("GET /api/articles/:article_id", () => {
             article_img_url: expect.any(String),
           });
         });
+      });
+  });
+  test.only("400: responds with an error when requested an id that doesnt exist", () => {
+    return request(app)
+      .get("/api/articles/2000")
+      .expect(400)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.msg).toBe("bad request");
       });
   });
 });
