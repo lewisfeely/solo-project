@@ -1,3 +1,4 @@
+const { query } = require("../connection");
 const {
   getTopic,
   getArticleById,
@@ -7,6 +8,7 @@ const {
   deleteCommentById,
   updateCommentsById,
   getAllUsers,
+  orderArticles,
 } = require("../model/model");
 
 exports.getTopics = (req, res) => {
@@ -14,8 +16,9 @@ exports.getTopics = (req, res) => {
   res.status(200).send({ topics });
 };
 
-exports.getArticles = (req, res) => {
+exports.getArticles = (req, res, next) => {
   const id = req.params.article_id;
+
   getArticleById(id)
     .then((response) => {
       res.status(200).send({ response });
@@ -25,14 +28,25 @@ exports.getArticles = (req, res) => {
     });
 };
 
-exports.getWholeArticle = (req, res) => {
-  getArticle()
-    .then((result) => {
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      next(err);
-    });
+exports.getWholeArticle = (req, res, next) => {
+  const { sort_by, order_by } = req.query;
+  if (sort_by || order_by) {
+    orderArticles(sort_by, order_by)
+      .then((rows) => {
+        res.status(200).send({ rows });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else {
+    getArticle()
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
 };
 
 exports.getCommentsByArticleId = (req, res) => {

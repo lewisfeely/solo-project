@@ -54,6 +54,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
+        console.log(body);
         body.response.forEach((articles) => {
           expect(articles).toMatchObject({
             author: expect.any(String),
@@ -100,7 +101,7 @@ describe("GET /api/articles", () => {
           });
         });
         console.log(body);
-        expect(body).toBeSortedBy("created_at", { decending: true });
+        expect(body).toBeSortedBy("created_at", { descending: true });
       });
   });
   test("400: returns bad request when inputting an invalid api", () => {
@@ -293,6 +294,35 @@ describe("GET /api/users", () => {
   test("400: bad request", () => {
     return request(app)
       .get("/api/invalid-endpoint")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+});
+
+describe("sort by queries, pass in two queries and order articles by them by ASC/DESC", () => {
+  test("orders by username in decending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order_by=DESC")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.rows).toBeSortedBy("title", { descending: true });
+      });
+  });
+  test("orders by decsending and created at by default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("returns a 400 bad request when sent invalid queries in", () => {
+    return request(app)
+      .get("/api/articles?sort_by=invalidQuery")
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
