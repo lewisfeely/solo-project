@@ -4,6 +4,7 @@ const {
   getArticle,
   getCommentsByArticleIds,
   updateCommentsById,
+  updateArticle,
 } = require("../model/model");
 
 exports.getTopics = (req, res) => {
@@ -58,6 +59,16 @@ exports.updateComments = (req, res, next) => {
     });
 };
 
-exports.updateVotes = (req, res) => {
-  console.log(req);
+exports.updateVotes = (req, res, next) => {
+  const { body } = req;
+  const { article_id } = req.params;
+  console.log(body, article_id);
+  updateArticle(article_id, body)
+    .then((updatedArticle) => {
+      res.status(200).send({ updatedArticle });
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 };

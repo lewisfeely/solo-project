@@ -33,6 +33,13 @@ app.use((error, req, res, next) => {
   if (error.status && error.msg) {
     res.status(error.status).send({ msg: error.msg });
   }
+  next(error);
+});
+
+app.use((err, req, res, next) => {
+  if (err.code === "22P02") {
+    res.status(400).send({ msg: "bad request" });
+  }
 });
 
 app.all("/*", (req, res, next) => {
