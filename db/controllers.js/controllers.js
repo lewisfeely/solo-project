@@ -3,8 +3,9 @@ const {
   getArticleById,
   getArticle,
   getCommentsByArticleIds,
-  updateCommentsById,
   updateArticle,
+  deleteCommentById,
+  updateCommentsById,
 } = require("../model/model");
 
 exports.getTopics = (req, res) => {
@@ -69,6 +70,17 @@ exports.updateVotes = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
+    });
+};
+exports.deleteComment = (req, res, next) => {
+  const { comments_id } = req.params;
+  console.log(comments_id);
+  deleteCommentById(comments_id)
+    .then((newTable) => {
+      res.status(204).send({ msg: "No content" });
+    })
+    .catch((err) => {
       next(err);
     });
 };

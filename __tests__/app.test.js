@@ -250,3 +250,27 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("DELETE: delete a comment by accessing it by id", () => {
+  test("204: removes a comment from the comment table", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+  test("400: bad request", () => {
+    return request(app)
+      .delete("/api/commets/3")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("404: not found when searching for a comment id that doesnt exist", () => {
+    return request(app)
+      .delete("/api/comments/3000")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("not found");
+      });
+  });
+});
