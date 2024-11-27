@@ -96,7 +96,7 @@ exports.deleteComment = (req, res, next) => {
 };
 
 exports.getUsers = (req, res, next) => {
-  getAllUsers(queries)
+  getAllUsers()
     .then((rows) => {
       res.status(200).send({ rows });
     })

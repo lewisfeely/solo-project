@@ -101,7 +101,7 @@ describe("GET /api/articles", () => {
           });
         });
         console.log(body);
-        expect(body).toBeSortedBy("created_at", { decending: true });
+        expect(body).toBeSortedBy("created_at", { descending: true });
       });
   });
   test("400: returns bad request when inputting an invalid api", () => {
@@ -302,7 +302,7 @@ describe("GET /api/users", () => {
   });
 });
 
-describe.only("sort by queries, pass in two queries and order articles by them by ASC/DESC", () => {
+describe("sort by queries, pass in two queries and order articles by them by ASC/DESC", () => {
   test("orders by username in decending order", () => {
     return request(app)
       .get("/api/articles?sort_by=title&order_by=DESC")
