@@ -103,3 +103,26 @@ exports.updateArticle = (article_id, votesInc) => {
         });
     });
 };
+exports.deleteCommentById = (comments_id) => {
+  return db
+    .query(`SELECT * FROM comments WHERE comment_id = $1`, [comments_id])
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "not found" });
+      }
+      return rows;
+    })
+    .then(() => {
+      return db.query(
+        `DELETE FROM comments 
+              WHERE comment_id = $1`,
+        [comments_id]
+      );
+    })
+    .then(() => {
+      console.log("in model");
+      return db.query(`SELECT * FROM comments`).then(({ rows }) => {
+        return rows;
+      });
+    });
+};
