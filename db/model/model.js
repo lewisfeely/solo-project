@@ -79,3 +79,27 @@ exports.updateCommentsById = (article_id, request) => {
       return rows[0];
     });
 };
+
+exports.updateArticle = (article_id, votesInc) => {
+  const votes = votesInc.inc_votes;
+  const inputs = [votes, article_id];
+  console.log(inputs);
+  return db
+    .query(
+      `UPDATE articles
+    SET votes = votes + $1 
+    WHERE article_id = $2`,
+      inputs
+    )
+    .then(() => {
+      return db
+        .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+        .then(({ rows }) => {
+          if (!rows.length) {
+            return Promise.reject({ status: 404, msg: "not found" });
+          }
+          console.log(rows);
+          return rows[0];
+        });
+    });
+};

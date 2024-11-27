@@ -207,24 +207,46 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-describe.skip("PATCH /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
   test("200: should be able to update an article by article id", () => {
     const votes = { inc_votes: 100 };
     return request(app)
       .patch("/api/articles/2")
       .send(votes)
       .expect(200)
-      .then(({ updated }) => {
-        console.log(updated);
-        expect(updated).toMatchObject({
+      .then(({ body }) => {
+        const { updatedArticle } = body;
+        expect(updatedArticle).toMatchObject({
           title: "Sony Vaio; or, The Laptop",
           topic: "mitch",
           author: "icellusedkars",
           body: expect.any(String),
-          created_at: expect.any(Number),
+          created_at: expect.any(String),
           article_img_url: expect.any(String),
           votes: 100,
         });
+      });
+  });
+  test("404: Not found when passed an article id that doenst exist", () => {
+    const votes = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/1000")
+      .send(votes)
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("not found");
+      });
+  });
+  test("400: bad request when sent an invalid data type into votes", () => {
+    const votes = { inc_votes: "i just washed my hands that why their wet" };
+    return request(app)
+      .patch("/api/articles/3")
+      .send(votes)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
       });
   });
 });
