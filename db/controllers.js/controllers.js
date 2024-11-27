@@ -6,11 +6,11 @@ const {
   updateArticle,
   deleteCommentById,
   updateCommentsById,
+  getAllUsers,
 } = require("../model/model");
 
 exports.getTopics = (req, res) => {
   const topics = getTopic();
-  console.log(topics);
   res.status(200).send({ topics });
 };
 
@@ -52,7 +52,6 @@ exports.updateComments = (req, res, next) => {
 
   updateCommentsById(article_id, { author, body })
     .then((result) => {
-      console.log(result);
       res.status(201).send({ result });
     })
     .catch((err) => {
@@ -63,22 +62,29 @@ exports.updateComments = (req, res, next) => {
 exports.updateVotes = (req, res, next) => {
   const { body } = req;
   const { article_id } = req.params;
-  console.log(body, article_id);
   updateArticle(article_id, body)
     .then((updatedArticle) => {
       res.status(200).send({ updatedArticle });
     })
     .catch((err) => {
-      console.log(err);
       next(err);
     });
 };
 exports.deleteComment = (req, res, next) => {
   const { comments_id } = req.params;
-  console.log(comments_id);
   deleteCommentById(comments_id)
     .then((newTable) => {
       res.status(204).send({ msg: "No content" });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getUsers = (req, res, next) => {
+  getAllUsers()
+    .then((rows) => {
+      res.status(200).send({ rows });
     })
     .catch((err) => {
       next(err);

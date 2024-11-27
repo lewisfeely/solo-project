@@ -274,3 +274,29 @@ describe("DELETE: delete a comment by accessing it by id", () => {
       });
   });
 });
+
+describe("GET /api/users", () => {
+  test("200: should return an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        body.rows.forEach((users) => {
+          expect(users).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
+  });
+  test("400: bad request", () => {
+    return request(app)
+      .get("/api/invalid-endpoint")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+});
