@@ -41,10 +41,10 @@ describe("GET /api/topics", () => {
   test("400: returns bad request when nothing is passed through", () => {
     return request(app)
       .get("/api/tropic")
-      .expect(404)
+      .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe("Not found");
+        expect(msg).toBe("bad request");
       });
   });
 });
@@ -71,10 +71,10 @@ describe("GET /api/articles/:article_id", () => {
   test("400: responds with an error when requested an id that doesnt exist", () => {
     return request(app)
       .get("/api/articles/2000")
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
         console.log(body);
-        expect(body.msg).toBe("bad request");
+        expect(body.msg).toBe("not found");
       });
   });
 });
@@ -103,13 +103,13 @@ describe("GET /api/articles", () => {
         expect(body).toBeSortedBy("created_at", { decending: true });
       });
   });
-  test("404: returns not found weh ninputtig an invalid api", () => {
+  test("400: returns bad request when inputting an invalid api", () => {
     return request(app)
       .get("/api/tartcles")
-      .expect(404)
+      .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe("Not found");
+        expect(msg).toBe("bad request");
       });
   });
 });
@@ -132,22 +132,99 @@ describe("GET /api/articles/:article:id/comments", () => {
         });
       });
   });
-  test("404: not found", () => {
-    return request(app)
-      .get("/api/articles/3/comm")
-      .expect(404)
-      .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("Not found");
-      });
-  });
   test("400: bad request", () => {
     return request(app)
-      .get("/api/articles/1000/comments")
+      .get("/api/articles/3/comm")
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe("bad request");
+      });
+  });
+  test("404: not found", () => {
+    return request(app)
+      .get("/api/articles/1000/comments")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("not found");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: adds a value to the table", () => {
+    const newComment = {
+      author: "rogersop",
+      body: "it was either that or muhammed",
+    };
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        const final = body.result;
+        console.log(final);
+        expect(final).toEqual(
+          expect.objectContaining({
+            comment_id: 19,
+            body: "it was either that or muhammed",
+            article_id: 2,
+            author: "rogersop",
+            votes: 0,
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+  test("400: bad request", () => {
+    const newComment = {
+      author: "rogersop",
+      body: "it was either that or muhammed",
+    };
+    return request(app)
+      .post("/api/articles/")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("404: returns not found when passed an article id that doesnt work", () => {
+    const newComment = {
+      author: "rogersop",
+      body: "it was either that or muhammed",
+    };
+    return request(app)
+      .post("/api/articles/870/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("not found");
+      });
+  });
+});
+
+describe.skip("PATCH /api/articles/:article_id", () => {
+  test("200: should be able to update an article by article id", () => {
+    const votes = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/2")
+      .send(votes)
+      .expect(200)
+      .then(({ updated }) => {
+        console.log(updated);
+        expect(updated).toMatchObject({
+          title: "Sony Vaio; or, The Laptop",
+          topic: "mitch",
+          author: "icellusedkars",
+          body: expect.any(String),
+          created_at: expect.any(Number),
+          article_img_url: expect.any(String),
+          votes: 100,
+        });
       });
   });
 });
