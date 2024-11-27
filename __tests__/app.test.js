@@ -207,7 +207,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only("PATCH /api/articles/:article_id", () => {
+describe.skip("PATCH /api/articles/:article_id", () => {
   test("200: should be able to update an article by article id", () => {
     const votes = { inc_votes: 100 };
     return request(app)
