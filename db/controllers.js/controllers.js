@@ -3,6 +3,7 @@ const {
   getArticleById,
   getArticle,
   getCommentsByArticleIds,
+  updateCommentsById,
 } = require("../model/model");
 
 exports.getTopics = (req, res) => {
@@ -41,4 +42,22 @@ exports.getCommentsByArticleId = (req, res) => {
     .catch((err) => {
       res.status(err.status).send({ msg: err.msg });
     });
+};
+
+exports.updateComments = (req, res, next) => {
+  const { article_id } = req.params;
+  const { author, body } = req.body;
+
+  updateCommentsById(article_id, { author, body })
+    .then((result) => {
+      console.log(result);
+      res.status(201).send({ result });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.updateVotes = (req, res) => {
+  console.log(req);
 };
