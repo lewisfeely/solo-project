@@ -1,4 +1,5 @@
 const db = require("../../db/connection");
+const { sort } = require("../data/test-data/users");
 // const articles = require("../data/test-data/articles");
 
 exports.getTopic = () => {
@@ -31,7 +32,7 @@ exports.getArticle = () => {
     LEFT JOIN comments
     ON articles.article_id = comments.article_id
     GROUP BY articles.article_id
-    ORDER BY created_at`;
+    ORDER BY created_at DESC`;
 
   return db.query(queryString).then(({ rows }) => {
     return rows;
@@ -128,7 +129,40 @@ exports.deleteCommentById = (comments_id) => {
 };
 
 exports.getAllUsers = () => {
-  return db.query(`SELECT * FROM users`).then(({ rows }) => {
+  let queryStr = `SELECT * FROM users`;
+
+  return db.query(queryStr).then(({ rows }) => {
+    console.log(rows);
+    return rows;
+  });
+};
+
+exports.orderArticles = (sort_by, order_by) => {
+  const validInputs = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+    "article_img_url",
+  ];
+  console.log(sort_by);
+  if (!sort_by || !validInputs.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+
+  let queryStr = "SELECT * FROM articles";
+  if (sort_by && order_by) {
+    queryStr += ` ORDER BY ${sort_by} ${order_by}`;
+  } else if (order_by) {
+    queryStr += ` ORDER BY created_at ${order_by}`;
+  } else if (sort_by) {
+    queryStr += ` ORDER BY ${sort_by} DESC`;
+  }
+  console.log(queryStr);
+  return db.query(queryStr).then(({ rows }) => {
     return rows;
   });
 };
