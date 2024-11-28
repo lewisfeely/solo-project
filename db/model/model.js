@@ -165,3 +165,17 @@ exports.orderArticles = (sort_by, order_by) => {
     return rows;
   });
 };
+
+exports.filterByTopics = (topics) => {
+  console.log(topics);
+  const validInputs = ["mitch", "cats"];
+  if (!validInputs.includes(topics)) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+  return db
+    .query(`SELECT * FROM articles WHERE topic = $1`, [topics])
+    .then(({ rows }) => {
+      console.log(rows);
+      return rows;
+    });
+};
