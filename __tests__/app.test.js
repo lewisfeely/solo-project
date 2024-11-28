@@ -331,7 +331,7 @@ describe("sort by queries, pass in two queries and order articles by them by ASC
   });
 });
 
-describe.only("GET /api/articles?topics=topcis", () => {
+describe("GET /api/articles?topics=topcis", () => {
   test("should return the articles that match the certain topic", () => {
     return request(app)
       .get("/api/articles?topics=mitch")
