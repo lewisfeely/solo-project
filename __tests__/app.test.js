@@ -378,14 +378,23 @@ describe("GET /api/articles?topics=topcis", () => {
   });
 });
 
-describe("GET /api/articles/:article_id", () => {
+describe("GET /api/articles/:article_id adding comment count", () => {
   test("200: returns 11 when passed an id of 1", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
         console.log(body);
-        expect(body.rows.comment_count).toBe(11);
+        expect(body.response[0].comment_count).toBe(11);
+      });
+  });
+  test("404: returns not found when passed an article id that doesnt exist", () => {
+    return request(app)
+      .get("/api/articles/300")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("not found");
       });
   });
 });
