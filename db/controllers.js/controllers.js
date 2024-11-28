@@ -25,6 +25,7 @@ exports.getArticles = (req, res, next) => {
       res.status(200).send({ response });
     })
     .catch((err) => {
+      console.log(err);
       res.status(err.status).send({ msg: err.msg });
     });
 };
