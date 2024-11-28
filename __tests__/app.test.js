@@ -330,3 +330,24 @@ describe("sort by queries, pass in two queries and order articles by them by ASC
       });
   });
 });
+
+describe("GET /api/articles?topics=topcis", () => {
+  test("should return the articles that match the certain topic", () => {
+    return request(app)
+      .get("/api/articles?topics=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        body.rows.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            topic: "mitch",
+            title: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            article_img_url: expect.any(String),
+          });
+        });
+      });
+  });
+});
