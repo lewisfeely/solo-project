@@ -9,6 +9,7 @@ const {
   updateCommentsById,
   getAllUsers,
   orderArticles,
+  filterByTopics,
 } = require("../model/model");
 
 exports.getTopics = (req, res) => {
@@ -29,9 +30,18 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.getWholeArticle = (req, res, next) => {
-  const { sort_by, order_by } = req.query;
+  const { sort_by, order_by, topics } = req.query;
+  console.log(topics);
   if (sort_by || order_by) {
     orderArticles(sort_by, order_by)
+      .then((rows) => {
+        res.status(200).send({ rows });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else if (typeof topics === "string") {
+    filterByTopics(topics)
       .then((rows) => {
         res.status(200).send({ rows });
       })
