@@ -377,3 +377,15 @@ describe("GET /api/articles?topics=topcis", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("200: returns 11 when passed an id of 1", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.rows.comment_count).toBe(11);
+      });
+  });
+});
