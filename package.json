@@ -5,10 +5,10 @@
   "main": "listen.js",
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
-    "yarn": "node ./db/seeds/run-seed.js",
+    "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
     "prepare": "husky install",
-    "yarn run": "node listen.js",
+    "start": "node listen.js",
     "seed-prod": "NODE_ENV=production npm run seed"
   },
   "repository": {
@@ -25,15 +25,15 @@
   "devDependencies": {
     "husky": "^8.0.2",
     "jest": "^27.5.1",
-    "jest-extended": "^2.0.0"
+    "jest-extended": "^2.0.0",
+    "jest-sorted": "^1.0.15",
+    "pg-format": "^1.0.4",
+    "supertest": "^7.0.0"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "jest-sorted": "^1.0.15",
-    "pg": "^8.7.3",
-    "pg-format": "^1.0.4",
-    "supertest": "^7.0.0"
+    "pg": "^8.7.3"
   },
   "jest": {
     "setupFilesAfterEnv": [
