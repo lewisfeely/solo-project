@@ -32,9 +32,11 @@ an example response for the articles api is:
 
 ## hosted version
 
+[render host link](https://dashboard.render.com/web/srv-ct47e3qj1k6c73eelet0/deploys/dep-ct4p608gph6c73f6l13g?r=2024-11-29%4010%3A09%3A10%7E2024-11-29%4010%3A15%3A30 "render hosting")
+
 ## project summary
 
-**add link tp project**
+**add link to project**
 
 **northcoders news project**
 

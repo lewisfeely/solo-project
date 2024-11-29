@@ -29,7 +29,6 @@ describe("GET /api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         topics.forEach((topic) => {
           expect(topic).toMatchObject({
             slug: expect.any(String),
@@ -54,7 +53,6 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         body.response.forEach((articles) => {
           expect(articles).toMatchObject({
             author: expect.any(String),
@@ -74,7 +72,6 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/2000")
       .expect(404)
       .then(({ body }) => {
-        console.log(body);
         expect(body.msg).toBe("not found");
       });
   });
@@ -165,7 +162,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(201)
       .then(({ body }) => {
         const final = body.result;
-        console.log(final);
         expect(final).toEqual(
           expect.objectContaining({
             comment_id: 19,
@@ -216,6 +212,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send(votes)
       .expect(200)
       .then(({ body }) => {
+        console.log(body);
         const { updatedArticle } = body;
         expect(updatedArticle).toMatchObject({
           title: "Sony Vaio; or, The Laptop",
@@ -252,7 +249,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("DELETE: delete a comment by accessing it by id", () => {
+describe("DELETE /api/comments/:article_id", () => {
   test("204: removes a comment from the comment table", () => {
     return request(app).delete("/api/comments/3").expect(204);
   });
@@ -302,13 +299,12 @@ describe("GET /api/users", () => {
   });
 });
 
-describe("sort by queries, pass in two queries and order articles by them by ASC/DESC", () => {
+describe("GET: /api/articles?sort_by=title&order_by=DESC", () => {
   test("orders by username in decending order", () => {
     return request(app)
       .get("/api/articles?sort_by=title&order_by=DESC")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body.rows).toBeSortedBy("title", { descending: true });
       });
   });
@@ -334,13 +330,13 @@ describe("sort by queries, pass in two queries and order articles by them by ASC
 describe("GET /api/articles?topics=topcis", () => {
   test("should return the articles that match the certain topic", () => {
     return request(app)
-      .get("/api/articles?topics=mitch")
+      .get("/api/articles?topics=cats")
       .expect(200)
       .then(({ body }) => {
         body.rows.forEach((article) => {
           expect(article).toMatchObject({
             article_id: expect.any(Number),
-            topic: "mitch",
+            topic: "cats",
             title: expect.any(String),
             author: expect.any(String),
             body: expect.any(String),
@@ -366,7 +362,7 @@ describe("GET /api/articles/:article_id adding comment count", () => {
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
+        console.log(body.response);
         expect(body.response[0].comment_count).toBe(11);
       });
   });
