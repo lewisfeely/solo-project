@@ -196,11 +196,14 @@ exports.filterByTopics = (topics) => {
   console.log(topics);
   const validInputs = ["mitch", "cats"];
   if (!validInputs.includes(topics)) {
-    return Promise.reject({ status: 400, msg: "bad request" });
+    return Promise.reject({ status: 404, msg: "not found" });
   }
   return db
     .query(`SELECT * FROM articles WHERE topic = $1`, [topics])
     .then(({ rows }) => {
+      if (!rows.length === 0) {
+        throw new Error();
+      }
       console.log(rows);
       return rows;
     });

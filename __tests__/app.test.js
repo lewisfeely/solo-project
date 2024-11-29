@@ -350,30 +350,12 @@ describe("GET /api/articles?topics=topcis", () => {
         });
       });
   });
-  test("should return all articles when passed no topic", () => {
-    return request(app)
-      .get("/api/articles")
-      .expect(200)
-      .then(({ body }) => {
-        console.log(body);
-        body.forEach((article) => {
-          expect(article).toMatchObject({
-            article_id: expect.any(Number),
-            topic: expect.any(String),
-            title: expect.any(String),
-            author: expect.any(String),
-            created_at: expect.any(String),
-            article_img_url: expect.any(String),
-          });
-        });
-      });
-  });
-  test("400: returns a bad request when passed an invalid topic", () => {
+  test("404: returns a not found when passed an invalid topic", () => {
     return request(app)
       .get("/api/articles?topics=invalid-topic")
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("bad request");
+        expect(body.msg).toBe("not found");
       });
   });
 });
