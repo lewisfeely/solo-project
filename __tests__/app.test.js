@@ -376,6 +376,3 @@ describe("GET /api/articles/:article_id adding comment count", () => {
       });
   });
 });
-describe("GET /api/users/:username", () => {
-  test("");
-});
