@@ -2,37 +2,11 @@
 
 ---
 
-create two files in the global scope with the preifx .env
-one called .env.test and another called .end.development
-
-app.test.js file
-the acceptaable queries for the /api is none.
-
-the acceptable queries for the /api/topics are also none.
-an example response for the /api topics api is:
-"exampleResponse": {
-"topics": [{ "slug": "football", "description": "Footie!" }]
-}
-
-the acceptable queries for the /api/articles are author, topic, sort_by, and order.
-an example response for the articles api is:
-"exampleResponse": {
-"articles": [
-{
-"title": "Seafood substitutions are increasing",
-"topic": "cooking",
-"author": "weegembump",
-"body": "Text from the article..",
-"created_at": "2018-05-30T15:59:13.341Z",
-"votes": 0,
-"comment_count": 6
-}
-]
-}
-
 ## hosted version
 
-[render host link](https://dashboard.render.com/web/srv-ct47e3qj1k6c73eelet0/deploys/dep-ct4p608gph6c73f6l13g?r=2024-11-29%4010%3A09%3A10%7E2024-11-29%4010%3A15%3A30 "render hosting")
+[render host link](https://solo-project-35gi.onrender.com "render hosting")
+
+to run the file on render, follow the above link and add the endpoint you would like to access (eg. /api/articles)
 
 ## project summary
 
