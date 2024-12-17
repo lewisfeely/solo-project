@@ -48,7 +48,7 @@ describe("GET /api/topics", () => {
   });
 });
 describe("GET /api/articles/:article_id", () => {
-  test("200: responds with an article with the corresponding article", () => {
+  test.only("200: responds with an article with the corresponding article", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)

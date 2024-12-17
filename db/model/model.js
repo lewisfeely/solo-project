@@ -26,7 +26,8 @@ exports.getArticleById = (id) => {
       return rows;
     })
     .then((rows) => {
-      if (rows[0].comment_count >= 0) {
+      console.log(rows[0].comment_count);
+      if (rows[0].comment_count !== undefined) {
         return rows;
       } else {
         return db
