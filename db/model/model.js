@@ -26,12 +26,15 @@ exports.getArticleById = (id) => {
       return rows;
     })
     .then((rows) => {
-      return db
-        .query(`SELECT * FROM comments WHERE article_id = ${id}`)
-        .then(({ rows }) => {
-          console.log(rows);
-          return rows;
-        });
+      if (rows[0].comment_count >= 0) {
+        return rows;
+      } else {
+        return db
+          .query(`SELECT * FROM comments WHERE article_id = ${id}`)
+          .then(({ rows }) => {
+            return rows;
+          });
+      }
     })
     .then((comments) => {
       return db
