@@ -17,42 +17,12 @@ exports.getArticleById = (id) => {
   }
   queryStr += " ORDER BY created_at";
 
-  return db
-    .query(queryStr, queryValues)
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "not found" });
-      }
-      return rows;
-    })
-    .then((rows) => {
-      console.log(rows[0].comment_count);
-      if (rows[0].comment_count !== undefined) {
-        return rows;
-      } else {
-        return db
-          .query(`SELECT * FROM comments WHERE article_id = ${id}`)
-          .then(({ rows }) => {
-            return rows;
-          });
-      }
-    })
-    .then((comments) => {
-      return db
-        .query(`ALTER TABLE articles ADD comment_count INT DEFAULT 0`)
-        .then(() => {
-          const length = comments.length;
-          return db
-            .query(`UPDATE articles SET comment_count = $1`, [length])
-            .then(() => {
-              return db
-                .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
-                .then(({ rows }) => {
-                  return rows;
-                });
-            });
-        });
-    });
+  return db.query(queryStr, queryValues).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "not found" });
+    }
+    return rows;
+  });
 };
 
 exports.getArticle = () => {

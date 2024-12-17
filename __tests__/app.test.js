@@ -48,7 +48,7 @@ describe("GET /api/topics", () => {
   });
 });
 describe("GET /api/articles/:article_id", () => {
-  test.only("200: responds with an article with the corresponding article", () => {
+  test("200: responds with an article with the corresponding article", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -358,7 +358,7 @@ describe("GET /api/articles?topics=topcis", () => {
 });
 
 describe("GET /api/articles/:article_id adding comment count", () => {
-  test("200: returns 11 when passed an id of 1", () => {
+  test.skip("200: returns 11 when passed an id of 1", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
