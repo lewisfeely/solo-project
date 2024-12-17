@@ -13,10 +13,9 @@ const {
 } = require("./controllers.js/controllers");
 
 const app = express();
+app.use(cors());
 
 app.use(express.json());
-
-app.use(cors());
 
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints: endpoints });

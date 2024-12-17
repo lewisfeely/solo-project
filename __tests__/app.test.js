@@ -48,11 +48,12 @@ describe("GET /api/topics", () => {
   });
 });
 describe("GET /api/articles/:article_id", () => {
-  test("200: responds with an array of articles", () => {
+  test("200: responds with an article with the corresponding article", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
+        console.log(body.response);
         body.response.forEach((articles) => {
           expect(articles).toMatchObject({
             author: expect.any(String),
