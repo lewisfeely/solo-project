@@ -53,31 +53,23 @@ exports.getCommentsByArticleIds = (article_id) => {
 };
 
 exports.updateCommentsById = (article_id, request) => {
+  const { author, body } = request;
   return db
-    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+    .query(
+      `INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;`,
+      [body, author, article_id]
+    )
     .then(({ rows }) => {
-      if (!rows.length) {
+      console.log(rows);
+      if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: "not found" });
       }
-      console.log(rows);
-      return rows;
-    })
-    .then(() => {
-      const { author, body } = request;
-      console.log(article_id);
-      const input = [author, body, article_id];
-      console.log(input);
-      return db.query(
-        `INSERT INTO comments
-              (author, body, article_id)
-              VALUES ($1, $2, $3)
-              RETURNING*`,
-        input
-      );
-    })
-    .then(({ rows }) => {
-      console.log(rows);
       return rows[0];
+    })
+    .catch((err) => {
+      if (err.code === "23503" || err.code === "") {
+        return Promise.reject({ status: 404, msg: "not found" });
+      }
     });
 };
 

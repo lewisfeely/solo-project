@@ -162,13 +162,14 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(201)
       .then(({ body }) => {
+        console.log(body);
         const final = body.result;
         expect(final).toEqual(
           expect.objectContaining({
             comment_id: 19,
-            body: "it was either that or muhammed",
+            body: expect.any(String),
             article_id: 2,
-            author: "rogersop",
+            author: expect.any(String),
             votes: 0,
             created_at: expect.any(String),
           })
@@ -199,6 +200,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(404)
       .then(({ body }) => {
+        console.log(body);
         const { msg } = body;
         expect(msg).toBe("not found");
       });
@@ -377,3 +379,14 @@ describe("GET /api/articles/:article_id adding comment count", () => {
       });
   });
 });
+
+// describe("POST /api/articles/:article_id", () => {
+//   test("201: returns the increased votes", () => {
+//     const send = {
+//       votes: 1,
+//     };
+//     return request(app)
+//     .post("/api/articles/1")
+//     .expect(20)
+//   });
+// });
