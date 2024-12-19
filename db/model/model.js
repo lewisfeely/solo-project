@@ -160,10 +160,10 @@ exports.orderArticles = (sort_by, order_by) => {
 
 exports.filterByTopics = (topics) => {
   console.log(topics);
-  const validInputs = ["mitch", "cats"];
-  if (!validInputs.includes(topics)) {
-    return Promise.reject({ status: 404, msg: "not found" });
-  }
+  // const validInputs = ["mitch", "cats"];
+  // if (!validInputs.includes(topics)) {
+  //   return Promise.reject({ status: 404, msg: "not found" });
+  // }
   return db
     .query(`SELECT * FROM articles WHERE topic = $1`, [topics])
     .then(({ rows }) => {

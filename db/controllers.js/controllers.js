@@ -48,7 +48,7 @@ exports.getWholeArticle = (req, res, next) => {
       .catch((err) => {
         next(err);
       });
-  } else if (typeof topics === "string") {
+  } else if (topics) {
     filterByTopics(topics)
       .then((rows) => {
         res.status(200).send({ rows });
