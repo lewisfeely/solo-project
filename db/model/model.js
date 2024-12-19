@@ -137,7 +137,7 @@ exports.orderArticles = (sort_by, order_by) => {
     "body",
     "created_at",
     "votes",
-    "article_img_url",
+    "comment_count",
   ];
   console.log(sort_by);
   if (!sort_by || !validInputs.includes(sort_by)) {
