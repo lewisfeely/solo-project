@@ -13,8 +13,15 @@ const {
 } = require("../model/model");
 
 exports.getTopics = (req, res) => {
-  const topics = getTopic();
-  res.status(200).send({ topics });
+  getTopic()
+    .then((result) => {
+      console.log(result.rows);
+      return result.rows;
+    })
+    .then((body) => {
+      console.log(body);
+      res.status(200).send({ body: body });
+    });
 };
 
 exports.getArticles = (req, res, next) => {

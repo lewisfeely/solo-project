@@ -29,7 +29,8 @@ describe("GET /api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        topics.forEach((topic) => {
+        console.log(body.body);
+        body.body.forEach((topic) => {
           expect(topic).toMatchObject({
             slug: expect.any(String),
             description: expect.any(String),
@@ -112,7 +113,7 @@ describe("GET /api/articles", () => {
       });
   });
 });
-describe("GET /api/articles/:article:id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("get articles by id", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -155,7 +156,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   test("201: adds a value to the table", () => {
     const newComment = {
       author: "rogersop",
-      body: "it was either that or muhammed",
+      body: "helloooo",
     };
     return request(app)
       .post("/api/articles/2/comments")
@@ -252,7 +253,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("DELETE /api/comments/:article_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
   test("204: removes a comment from the comment table", () => {
     return request(app).delete("/api/comments/3").expect(204);
   });
@@ -333,13 +334,14 @@ describe("GET: /api/articles?sort_by=title&order_by=DESC", () => {
 describe("GET /api/articles?topics=topcis", () => {
   test("should return the articles that match the certain topic", () => {
     return request(app)
-      .get("/api/articles?topics=cats")
+      .get("/api/articles?topics=mitch")
       .expect(200)
       .then(({ body }) => {
+        console.log(body.rows);
         body.rows.forEach((article) => {
           expect(article).toMatchObject({
             article_id: expect.any(Number),
-            topic: "cats",
+            topic: "mitch",
             title: expect.any(String),
             author: expect.any(String),
             body: expect.any(String),
